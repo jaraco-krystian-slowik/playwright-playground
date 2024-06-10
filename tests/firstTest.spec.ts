@@ -60,3 +60,27 @@ test("locatig child", async ({ page }) => {
 
   await page.locator("nb-card").nth(4).getByRole("button").click();
 });
+
+test("find parent", async ({ page }) => {
+  await page
+    .locator("nb-card", { hasText: "Using the Grid" })
+    .getByRole("textbox", { name: "Email" })
+    .click();
+
+  await page
+    .locator("nb-card", { has: page.locator("#inputEmail1") })
+    .getByRole("textbox", { name: "Email" })
+    .click();
+
+  await page
+    .locator("nb-card")
+    .filter({ hasText: "Basic Form" })
+    .getByRole("textbox", { name: "Email" })
+    .click();
+
+  await page
+    .locator("nb-card")
+    .filter({ has: page.locator(".status-danger") })
+    .getByRole("textbox", { name: "Password" })
+    .click();
+});
