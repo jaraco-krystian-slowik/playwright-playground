@@ -84,3 +84,15 @@ test("find parent", async ({ page }) => {
     .getByRole("textbox", { name: "Password" })
     .click();
 });
+
+test("fill basic form", async ({ page }) => {
+  const basicForm = await page
+    .locator("nb-card")
+    .filter({ hasText: "Basic Form" });
+
+  await basicForm
+    .getByRole("textbox", { name: "Email" })
+    .fill("email@email.com");
+  await basicForm.getByRole("textbox", { name: "Password" }).fill("somepass");
+  await basicForm.getByRole("button").click();
+});
