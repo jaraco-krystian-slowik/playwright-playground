@@ -75,7 +75,7 @@ test.describe("checkboxes", async () => {
     await page.getByText("Toastr").click();
   });
 
-  test("should check checkbox", async ({ page }) => {
+  test("should modify checkbox", async ({ page }) => {
     // metoda dla debili
     await page
       .getByRole("checkbox", { name: "Hide on click" })
@@ -101,6 +101,44 @@ test.describe("checkboxes", async () => {
     for (const checkbox of await allCheckBoxes.all()) {
       await checkbox.uncheck({ force: true });
       expect(await checkbox.isChecked()).toBeFalsy();
+    }
+  });
+});
+
+test.describe("dropdown & menu", async () => {
+  test("splitted dropdown", async ({ page }) => {
+    // const modeButton = await page.getByRole("button", { name: "Light" });
+    const modeButton = await page.locator("ngx-header nb-select");
+    await modeButton.click();
+
+    const optionList = await page.locator("nb-option-list nb-option");
+
+    await expect(optionList).toHaveText([
+      "Light",
+      "Dark",
+      "Cosmic",
+      "Corporate",
+    ]);
+
+    await optionList.filter({ hasText: "Cosmic" }).click();
+
+    const header = await page.locator("nb-layout-header");
+    // optionList.getByText("Cosmic").click();
+    await expect(page.locator("body")).toHaveClass(/nb-theme-cosmic/);
+    await expect(header).toHaveCSS("background-color", "rgb(50, 50, 89)");
+
+    const themes = {
+      Light: "rgb(255, 255, 255)",
+      Dark: "rgb(34, 43, 69)",
+      Cosmic: "rgb(50, 50, 89)",
+      Corporate: "rgb(255, 255, 255)",
+    };
+    await modeButton.click();
+
+    for (const theme in themes) {
+      await optionList.filter({ hasText: theme }).click();
+      await expect(header).toHaveCSS("background-color", themes[theme]);
+      if (theme !== "Corporate") await modeButton.click();
     }
   });
 });
