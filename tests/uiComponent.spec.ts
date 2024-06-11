@@ -72,10 +72,11 @@ test.describe("Form layout", async () => {
 test.describe("checkboxes", async () => {
   test.beforeEach(async ({ page }) => {
     await page.getByText("Modal & Overlays").click();
-    await page.getByText("Toastr").click();
   });
 
   test("should modify checkbox", async ({ page }) => {
+    await page.getByText("Toastr").click();
+
     // metoda dla debili
     await page
       .getByRole("checkbox", { name: "Hide on click" })
@@ -140,5 +141,23 @@ test.describe("dropdown & menu", async () => {
       await expect(header).toHaveCSS("background-color", themes[theme]);
       if (theme !== "Corporate") await modeButton.click();
     }
+  });
+});
+test.describe("tooltips", async () => {
+  test.beforeEach(async ({ page }) => {
+    await page.getByText("Modal & Overlays").click();
+
+    await page.getByText("Tooltip").click();
+  });
+  test("tooltip tests", async ({ page }) => {
+    const tooltipCard = await page.locator("nb-card", {
+      hasText: "Tooltip placements",
+    });
+
+    await tooltipCard.getByRole("button", { name: "Top" }).hover();
+    //page.getByRole('tooltip) works if tooltip role is created
+
+    const tooltip = await page.locator("nb-tooltip").textContent();
+    expect(tooltip).toEqual("This is a tooltip");
   });
 });
