@@ -5,3 +5,4 @@ node_modules/
 /playwright/.cache/
 pw-practice-app/node_modules/
 pw-practicr-app/.angular
+/pw-practice-app/.angular
