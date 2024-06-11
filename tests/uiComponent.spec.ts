@@ -161,3 +161,26 @@ test.describe("tooltips", async () => {
     expect(tooltip).toEqual("This is a tooltip");
   });
 });
+test.describe("dialog / smart table", async () => {
+  test.beforeEach(async ({ page }) => {
+    await page.getByText("Tables & Data").click();
+    await page.getByText("Smart Table").click();
+  });
+  test("alerts", async ({ page }) => {
+    const tableTrashIcon = await page
+      .getByRole("table")
+      .locator("tr", { hasText: "mdo@gmail.com" })
+      .locator(".nb-trash");
+
+    page.on("dialog", (d) => {
+      expect(d.message()).toEqual("Are you sure you want to delete?");
+      d.accept();
+    });
+
+    await tableTrashIcon.click();
+
+    await expect(page.locator("table tr").first()).not.toHaveText(
+      "mdo@gmail.com"
+    );
+  });
+});
