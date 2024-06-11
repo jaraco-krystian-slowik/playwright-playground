@@ -68,3 +68,39 @@ test.describe("Form layout", async () => {
     ).toBeTruthy();
   });
 });
+
+test.describe("checkboxes", async () => {
+  test.beforeEach(async ({ page }) => {
+    await page.getByText("Modal & Overlays").click();
+    await page.getByText("Toastr").click();
+  });
+
+  test("should check checkbox", async ({ page }) => {
+    // metoda dla debili
+    await page
+      .getByRole("checkbox", { name: "Hide on click" })
+      .click({ force: true });
+
+    //check determinates value
+    await page
+      .getByRole("checkbox", { name: "Hide on click" })
+      .uncheck({ force: true });
+
+    await page
+      .getByRole("checkbox", { name: "Prevent arising of duplicate toast" })
+      .check({ force: true });
+
+    const allCheckBoxes = await page.getByRole("checkbox");
+
+    //select
+    for (const checkbox of await allCheckBoxes.all()) {
+      await checkbox.check({ force: true });
+      expect(await checkbox.isChecked()).toBeTruthy();
+    }
+    //un-select
+    for (const checkbox of await allCheckBoxes.all()) {
+      await checkbox.uncheck({ force: true });
+      expect(await checkbox.isChecked()).toBeFalsy();
+    }
+  });
+});
