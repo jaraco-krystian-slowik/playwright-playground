@@ -233,4 +233,64 @@ test.describe("datepicker", () => {
       .click();
     await expect(datePickerForm).toHaveValue(/30,/);
   });
+
+  test("should select date of tomorrow correctly", async ({ page }) => {
+    const datePickerForm = await page
+      .locator("nb-card-body")
+      .getByPlaceholder("Form Picker");
+
+    await datePickerForm.click();
+
+    let date = new Date();
+    date.setDate(date.getDate() + 1);
+    const expectedDate = date.getDate().toString();
+
+    const expectedMonthShort = date.toLocaleString("en-US", { month: "short" });
+    const expectedYear = date.getFullYear();
+
+    const dateToAssert = `${expectedMonthShort} ${expectedDate}, ${expectedYear}`;
+    await page
+      .locator("nb-calendar-day-cell:not(.bounding-month)") // exclude past month by class
+      .getByText(expectedDate, { exact: true }) // avoid duplicates (eg 1, 11, 13, 21)
+      .click();
+    await expect(datePickerForm).toHaveValue(dateToAssert);
+  });
+  test("should select date of futute month correctly", async ({ page }) => {
+    const datePickerForm = await page
+      .locator("nb-card-body")
+      .getByPlaceholder("Form Picker");
+
+    await datePickerForm.click();
+
+    let date = new Date();
+    date.setDate(date.getDate() + 100); // 100 days forward
+    const expectedDate = date.getDate().toString();
+
+    const expectedMonthShort = date.toLocaleString("en-US", { month: "short" });
+    const expectedMonthLong = date.toLocaleString("en-US", { month: "long" });
+    const expectedYear = date.getFullYear();
+
+    const dateToAssert = `${expectedMonthShort} ${expectedDate}, ${expectedYear}`;
+
+    let pickerMonthAndYear = await page
+      .locator("nb-calendar-view-mode")
+      .textContent();
+    const expectedMonthAndYear = ` ${expectedMonthLong} ${expectedYear} `;
+
+    while (!pickerMonthAndYear?.includes(expectedMonthAndYear)) {
+      // navigate to month
+      await page
+        .locator('nb-calendar-pageable-navigation [data-name="chevron-right"]')
+        .click();
+      pickerMonthAndYear = await page
+        .locator("nb-calendar-view-mode")
+        .textContent();
+    }
+
+    await page
+      .locator("nb-calendar-day-cell:not(.bounding-month)") // exclude past month by class
+      .getByText(expectedDate, { exact: true }) // avoid duplicates (eg 1, 11, 13, 21)
+      .click();
+    await expect(datePickerForm).toHaveValue(dateToAssert);
+  });
 });
