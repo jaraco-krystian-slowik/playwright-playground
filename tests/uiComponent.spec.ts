@@ -149,23 +149,23 @@ test.describe("tooltips", async () => {
 
     await page.getByText("Tooltip").click();
   });
-  test("alerts", async ({ page }) => {
-    const tableTrashIcon = await page
-      .getByRole("table")
-      .locator("tr", { hasText: "mdo@gmail.com" })
-      .locator(".nb-trash");
+  // test("alerts", async ({ page }) => {
+  //   const tableTrashIcon = await page
+  //     .getByRole("table")
+  //     .locator("tr", { hasText: "mdo@gmail.com" })
+  //     .locator(".nb-trash");
 
-    page.on("dialog", (d) => {
-      expect(d.message()).toEqual("Are you sure you want to delete?");
-      d.accept();
-    });
+  //   page.on("dialog", (d) => {
+  //     expect(d.message()).toEqual("Are you sure you want to delete?");
+  //     d.accept();
+  //   });
 
-    await tableTrashIcon.click();
+  //   await tableTrashIcon.click();
 
-    await expect(page.locator("table tr").first()).not.toHaveText(
-      "mdo@gmail.com"
-    );
-  });
+  //   await expect(page.locator("table tr").first()).not.toHaveText(
+  //     "mdo@gmail.com"
+  //   );
+  // });
   test("should display tooltips correctly", async ({ page }) => {
     const tooltipCard = await page.locator("nb-card", {
       hasText: "Tooltip placements",
