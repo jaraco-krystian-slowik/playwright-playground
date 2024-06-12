@@ -213,4 +213,21 @@ test.describe("dialog / smart table", async () => {
       "test@test.com"
     );
   });
+  test("should filter output", async ({ page }) => {
+    const ages = ["20", "30", "40", "200"];
+
+    for (let age of ages) {
+      await page.locator("input-filter").getByPlaceholder("Age").clear();
+      await page.locator("input-filter").getByPlaceholder("Age").fill(age);
+      await page.waitForTimeout(300);
+      const ageRows = page.locator("tbody tr");
+
+      for (let row of await ageRows.all()) {
+        const cellValue = await row.locator("td").last().textContent();
+        age === "200"
+          ? expect(cellValue).toEqual(" No data found ")
+          : expect(cellValue).toEqual(age);
+      }
+    }
+  });
 });
