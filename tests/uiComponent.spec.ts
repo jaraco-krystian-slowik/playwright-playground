@@ -214,3 +214,23 @@ test.describe("dialog / smart table", async () => {
     }
   });
 });
+
+test.describe("datepicker", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.getByText("Forms").click();
+    await page.getByText("Datepicker").click();
+  });
+
+  test("should select date from current month correctly", async ({ page }) => {
+    const datePickerForm = await page
+      .locator("nb-card-body")
+      .getByPlaceholder("Form Picker");
+
+    await datePickerForm.click();
+    await page
+      .locator("nb-calendar-day-cell:not(.bounding-month)") // exclude past month by class
+      .getByText("30", { exact: true }) // avoid duplicates (eg 1, 11, 13, 21)
+      .click();
+    await expect(datePickerForm).toHaveValue(/30,/);
+  });
+});
