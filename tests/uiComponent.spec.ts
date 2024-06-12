@@ -183,4 +183,34 @@ test.describe("dialog / smart table", async () => {
       "mdo@gmail.com"
     );
   });
+
+  test("table check / should update age / should change the page / should update email", async ({
+    page,
+  }) => {
+    // get row by any text innit
+    const targetRow = page.getByRole("row", { name: "twitter@outlook.com" });
+    await targetRow.locator(".nb-edit").click();
+
+    await page.locator("input-editor").getByPlaceholder("Age").fill("35");
+    await page.locator(".nb-checkmark").click();
+    await expect(targetRow.locator("td").nth(6)).toHaveText("35");
+
+    //pagination
+
+    await page.locator(".ng2-smart-pagination-nav").getByText("2").click();
+    const targetRowByIdColumn = page
+      .getByRole("row", { name: "11" })
+      .filter({ has: page.locator("td").nth(1).getByText("11") });
+    await targetRowByIdColumn.locator(".nb-edit").click();
+
+    await page
+      .locator("input-editor")
+      .getByPlaceholder("E-mail")
+      .fill("test@test.com");
+    await page.locator(".nb-checkmark").click();
+
+    await expect(targetRowByIdColumn.locator("td").nth(5)).toHaveText(
+      "test@test.com"
+    );
+  });
 });
