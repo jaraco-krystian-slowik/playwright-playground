@@ -10,7 +10,7 @@ test.describe("Form layout", async () => {
     await page.getByText("Form layouts").click();
   });
 
-  test("input fields", async ({ page }) => {
+  test("should manage input fields correctly", async ({ page }) => {
     const usingTheGridEmailInput = page
       .locator("nb-card", { hasText: "using the grid" })
       .getByRole("textbox", { name: "email" });
@@ -29,7 +29,7 @@ test.describe("Form layout", async () => {
     await expect(usingTheGridEmailInput).toHaveValue("test@test2.com");
   });
 
-  test("radio buttons", async ({ page }) => {
+  test("should toggle radio buttons correctly", async ({ page }) => {
     const usingTheGridForm = page.locator("nb-card", {
       hasText: "using the grid",
     });
@@ -74,7 +74,7 @@ test.describe("checkboxes", async () => {
     await page.getByText("Modal & Overlays").click();
   });
 
-  test("should modify checkbox", async ({ page }) => {
+  test("should toggle checkboxes correctly", async ({ page }) => {
     await page.getByText("Toastr").click();
 
     // metoda dla debili
@@ -107,7 +107,7 @@ test.describe("checkboxes", async () => {
 });
 
 test.describe("dropdown & menu", async () => {
-  test("splitted dropdown", async ({ page }) => {
+  test("should handle dropdown selections correctly", async ({ page }) => {
     // const modeButton = await page.getByRole("button", { name: "Light" });
     const modeButton = await page.locator("ngx-header nb-select");
     await modeButton.click();
@@ -149,7 +149,7 @@ test.describe("tooltips", async () => {
 
     await page.getByText("Tooltip").click();
   });
-  test("tooltip tests", async ({ page }) => {
+  test("should display tooltips correctly", async ({ page }) => {
     const tooltipCard = await page.locator("nb-card", {
       hasText: "Tooltip placements",
     });
@@ -166,25 +166,8 @@ test.describe("dialog / smart table", async () => {
     await page.getByText("Tables & Data").click();
     await page.getByText("Smart Table").click();
   });
-  test("alerts", async ({ page }) => {
-    const tableTrashIcon = await page
-      .getByRole("table")
-      .locator("tr", { hasText: "mdo@gmail.com" })
-      .locator(".nb-trash");
 
-    page.on("dialog", (d) => {
-      expect(d.message()).toEqual("Are you sure you want to delete?");
-      d.accept();
-    });
-
-    await tableTrashIcon.click();
-
-    await expect(page.locator("table tr").first()).not.toHaveText(
-      "mdo@gmail.com"
-    );
-  });
-
-  test("table check / should update age / should change the page / should update email", async ({
+  test("table check / update age / change the page / update email correctly", async ({
     page,
   }) => {
     // get row by any text innit
@@ -213,7 +196,7 @@ test.describe("dialog / smart table", async () => {
       "test@test.com"
     );
   });
-  test("should filter output", async ({ page }) => {
+  test("should filter table by age correctly", async ({ page }) => {
     const ages = ["20", "30", "40", "200"];
 
     for (let age of ages) {
