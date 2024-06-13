@@ -6,3 +6,4 @@ node_modules/
 pw-practice-app/node_modules/
 pw-practicr-app/.angular
 /pw-practice-app/.angular
+.DS_Store
