@@ -14,4 +14,6 @@ test("navigate to form page", async ({ page }) => {
   await navigateTo.smartTablePage();
   await page.waitForTimeout(400);
   await navigateTo.toastPage();
+  await page.waitForTimeout(400);
+  await navigateTo.tooltipPage();
 });
