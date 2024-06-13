@@ -219,7 +219,7 @@ test.describe("dialog / smart table", async () => {
     for (let age of ages) {
       await page.locator("input-filter").getByPlaceholder("Age").clear();
       await page.locator("input-filter").getByPlaceholder("Age").fill(age);
-      await page.waitForTimeout(300);
+      await page.waitForTimeout(500);
       const ageRows = page.locator("tbody tr");
 
       for (let row of await ageRows.all()) {
