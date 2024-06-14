@@ -101,4 +101,31 @@ test.describe("CRUD on article", () => {
 
     await expect(lastArticleInGlobalFeed).not.toContainText(articleTitle);
   });
+
+  test("should add article and remove via API", async ({ page, request }) => {
+    const articleTitle = Date.now().toString();
+    console.log("Expected title: ", articleTitle);
+    const [articleResponse, slug] = await createArticle(request, articleTitle);
+    await expect(articleResponse.status()).toEqual(201);
+
+    await page.getByText("Global Feed").click();
+    const lastArticleInGlobalFeed = await page
+      .locator("app-article-list h1")
+      .first();
+
+    await expect(lastArticleInGlobalFeed).toContainText(articleTitle);
+
+    const deleteArticle = await request.delete(
+      `${APPURL.API}/articles/${slug}`,
+      {
+        headers: {
+          Authorization: `Token ${bearerToken}`,
+        },
+      }
+    );
+    expect(deleteArticle.status()).toEqual(204);
+
+    await page.getByText("Global Feed").click();
+    await expect(lastArticleInGlobalFeed).not.toContainText(articleTitle);
+  });
 });
