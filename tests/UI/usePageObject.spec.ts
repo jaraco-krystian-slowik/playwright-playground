@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
-import { NavigationPage } from "../page-objects/navigationPage";
-import { FormLayoutsPages } from "../page-objects/formLayoutPages";
+import { NavigationPage } from "../../page-objects/navigationPage";
+import { FormLayoutsPages } from "../../page-objects/formLayoutPages";
 
 test.beforeEach(async ({ page }) => {
   await page.goto("http://localhost:4200");
