@@ -10,15 +10,7 @@ test.beforeEach(async ({ page }) => {
       body: JSON.stringify(tags),
     });
   });
-
   await page.goto(APPURL.APP);
-
-  await page.getByText("Sign in").click();
-  await page.getByRole("textbox", { name: "Email" }).fill(CREDENTIALS.username);
-  await page
-    .getByRole("textbox", { name: "Password" })
-    .fill(CREDENTIALS.password);
-  await page.getByRole("button", { name: "Sign in" }).click();
 });
 
 test.describe("should mock data", () => {
@@ -86,7 +78,7 @@ test.describe("CRUD on article", () => {
     page,
     request,
   }) => {
-    const articleTitle = Date.now().toString();
+    const articleTitle = new Date().toLocaleString();
     const [articlaResponse] = await createArticle(request, articleTitle);
     await expect(articlaResponse.status()).toEqual(201);
 
